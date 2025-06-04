@@ -1,0 +1,2 @@
+# kiwoom_auto_trading_with_selector
+kiwoom_auto_trading_with_selector
