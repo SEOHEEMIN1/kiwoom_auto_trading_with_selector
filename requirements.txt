@@ -1,0 +1,4 @@
+pykiwoom
+pandas
+apscheduler
+python-dotenv
