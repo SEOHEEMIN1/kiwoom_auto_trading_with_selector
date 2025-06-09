@@ -19,6 +19,12 @@ and groups stocks into A/B/C buy candidates. The results are saved to
    pip install --upgrade pip
    pip install -r requirements.txt
    ```
+4. *(Optional)* install development tools for linting, formatting and tests:
+
+   ```bash
+   pip install -r requirements-dev.txt
+   ```
+
 
 ### Kiwoom credentials
 
