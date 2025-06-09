@@ -3,6 +3,7 @@
 import csv
 from datetime import datetime
 
+
 def save_to_csv(data: list, base_filename: str = "candidates"):
     """
     매수 후보 리스트를 CSV로 저장
@@ -19,7 +20,7 @@ def save_to_csv(data: list, base_filename: str = "candidates"):
 
     keys = data[0].keys()
     try:
-        with open(filename, 'w', newline='', encoding='utf-8-sig') as f:
+        with open(filename, "w", newline="", encoding="utf-8-sig") as f:
             dict_writer = csv.DictWriter(f, fieldnames=keys)
             dict_writer.writeheader()
             dict_writer.writerows(data)
