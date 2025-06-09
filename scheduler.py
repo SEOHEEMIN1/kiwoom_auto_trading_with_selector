@@ -2,7 +2,11 @@
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
-from zoneinfo import ZoneInfo
+
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:  # Python <3.9
+    from backports.zoneinfo import ZoneInfo
 
 import main
 
