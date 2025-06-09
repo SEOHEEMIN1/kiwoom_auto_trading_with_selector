@@ -1,7 +1,11 @@
 # utils.py
 
+import logging
 import csv
 from datetime import datetime
+
+
+logger = logging.getLogger(__name__)
 
 
 def save_to_csv(data: list, base_filename: str = "candidates"):
@@ -12,7 +16,7 @@ def save_to_csv(data: list, base_filename: str = "candidates"):
     - UTF-8 BOM 포함 (encoding='utf-8-sig') :contentReference[oaicite:34]{index=34}
     """
     if not data:
-        print("[Info] 저장할 데이터가 없습니다.")
+        logger.info("저장할 데이터가 없습니다.")
         return
 
     today_str = datetime.today().strftime("%Y%m%d")
@@ -24,6 +28,6 @@ def save_to_csv(data: list, base_filename: str = "candidates"):
             dict_writer = csv.DictWriter(f, fieldnames=keys)
             dict_writer.writeheader()
             dict_writer.writerows(data)
-        print(f"[Saved] {filename} 파일이 생성되었습니다.")
+        logger.info("[Saved] %s 파일이 생성되었습니다.", filename)
     except Exception as e:
-        print(f"[Error] CSV 저장 중 오류: {e}")
+        logger.error("CSV 저장 중 오류: %s", e)

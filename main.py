@@ -1,10 +1,18 @@
 # main.py
 
+import logging
 import time
 from kiwoom_api import KiwoomAPI
 from indicators import calculate_sma, calculate_rsi_wilder
 from strategy import select_candidates
 from utils import save_to_csv
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 
 def main():
@@ -18,27 +26,27 @@ def main():
     api = KiwoomAPI()
 
     try:
-        print("[Info] 로그인 시도 중...")
+        logger.info("로그인 시도 중...")
         api.login()
-        print("[Info] 로그인 성공")
+        logger.info("로그인 성공")
     except Exception as e:
-        print(f"[Error] 로그인 실패: {e}")
+        logger.error("로그인 실패: %s", e)
         return
 
-    print("[Info] KOSPI 종목 코드 수집 중...")
+    logger.info("KOSPI 종목 코드 수집 중...")
     codes = api.get_kospi_codes()
-    print(f"[Info] 수집된 KOSPI 종목 수: {len(codes)}")
+    logger.info("수집된 KOSPI 종목 수: %d", len(codes))
 
     candidates = []
 
     for idx, code in enumerate(codes, start=1):
         # 진행 상황 출력
-        print(f"[{idx}/{len(codes)}] 코드: {code} 데이터 수집 중...")
+        logger.info("[%d/%d] 코드: %s 데이터 수집 중...", idx, len(codes), code)
 
         # 1) 과거 51일 이상 종가 데이터 요청
         df_price = api.get_price_data(code, count=51)
         if df_price is None or len(df_price) < 51:
-            print(f"[Warning] {code} 데이터 부족 또는 오류")
+            logger.warning("%s 데이터 부족 또는 오류", code)
             continue
 
         # 2) 이동평균(MA20, MA50) 계산
@@ -61,13 +69,15 @@ def main():
         candidate = select_candidates(code, name, df_price)
         if candidate:
             candidates.append(candidate)
-            print(f"  → 후보 선정: {code} ({name}), 그룹={candidate['group']}")
+            logger.info(
+                "  → 후보 선정: %s (%s), 그룹=%s", code, name, candidate["group"]
+            )
 
         # 6) 호출 제한 대응: 종목별 최소 0.2초 대기 권장, 에러 시 추가 대기
         time.sleep(0.2)
 
     # 7) 결과 저장
-    print("[Info] 후보 리스트 저장 중...")
+    logger.info("후보 리스트 저장 중...")
     save_to_csv(candidates, base_filename="candidates")
 
 

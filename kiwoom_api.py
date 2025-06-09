@@ -1,11 +1,15 @@
 # kiwoom_api.py
 
+import logging
 import time
 from datetime import datetime
 import os
 from dotenv import load_dotenv
 from pykiwoom.kiwoom import Kiwoom
 import pandas as pd
+
+
+logger = logging.getLogger(__name__)
 
 
 class KiwoomAPI:
@@ -105,7 +109,7 @@ class KiwoomAPI:
                     break
 
             except Exception as e:
-                print(f"[Error] {code} 데이터 수집 중 오류: {e}")
+                logger.error("%s 데이터 수집 중 오류: %s", code, e)
                 return None  # 예외 발생 시 None 반환
 
         if not all_data:
