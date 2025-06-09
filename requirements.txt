@@ -3,3 +3,4 @@ pykiwoom
 pandas
 apscheduler
 python-dotenv
+backports.zoneinfo; python_version < "3.9"
