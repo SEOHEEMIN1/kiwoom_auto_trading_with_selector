@@ -2,6 +2,8 @@
 
 import time
 from datetime import datetime
+import os
+from dotenv import load_dotenv
 from pykiwoom.kiwoom import Kiwoom
 import pandas as pd
 
@@ -18,6 +20,17 @@ class KiwoomAPI:
         Kiwoom OpenAPI+ 로그인
         - CommConnect(block=True) 호출 후 연결 상태 확인
         """
+        # 환경 변수 로드 (.env 파일이 있으면 읽음)
+        load_dotenv()
+        user = os.environ.get("KIWOOM_USER")
+        pw = os.environ.get("KIWOOM_PW")
+
+        # PyKiwoom은 사용자 정보를 환경 변수로 전달해 자동 로그인할 수 있다
+        if user:
+            os.environ["KH_OPENAPI_LOGIN_ID"] = user
+        if pw:
+            os.environ["KH_OPENAPI_LOGIN_PW"] = pw
+
         self.kiwoom.CommConnect(block=True)
         # 연결 상태 확인 (연결 실패 시 예외 발생)
         if self.kiwoom.GetConnectState() == 0:

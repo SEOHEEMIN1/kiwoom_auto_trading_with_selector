@@ -22,8 +22,9 @@ and groups stocks into A/B/C buy candidates. The results are saved to
 
 ### Kiwoom credentials
 
-Provide your Kiwoom OpenAPI login through environment variables or a `.env`
-file loaded with `python-dotenv`:
+`KiwoomAPI.login()` automatically loads a `.env` file (if found) and reads
+`KIWOOM_USER` and `KIWOOM_PW` from the environment before connecting. Set these
+variables in your shell or in a `.env` file:
 
 ```
 KIWOOM_USER=your_id
